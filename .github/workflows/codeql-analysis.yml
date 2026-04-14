@@ -16,9 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         language: [ 'javascript-typescript' ]
-    steps:
+steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
+      uses: actions/checkout@v4
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
@@ -27,7 +28,21 @@ jobs:
         config: |
           paths-ignore:
             - 'data/static/codefixes'
+
     - name: Autobuild
       uses: github/codeql-action/autobuild@v3
+
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
+      with:
+        # Esto genera el archivo físico en el runner
+        upload: False 
+        output: sarif-results
+
+    - name: Upload SARIF as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: codeql-results-json
+        # Buscamos el archivo generado en el paso anterior
+        path: sarif-results/*.sarif
+        retention-days: 7
