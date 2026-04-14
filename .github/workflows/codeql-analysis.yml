@@ -35,14 +35,13 @@ steps:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
-        # Esto genera el archivo físico en el runner
-        upload: False 
+        # Esto genera el archivo físico necesario para la exportación
         output: sarif-results
 
     - name: Upload SARIF as Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: codeql-results-json
-        # Buscamos el archivo generado en el paso anterior
+        name: reporte-seguridad-juice-shop
+        # Buscamos en la carpeta que definimos arriba
         path: sarif-results/*.sarif
         retention-days: 7
